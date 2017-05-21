@@ -48,24 +48,30 @@ public class PortScanner {
         return executionTime;
     }
 
-    public void scan() {
+    public ScannedHost scan() {
         log.info("----------------------------------------------------");
         log.info("Starting scan " + host + ":");
+        log.info("Timeout " + timeout + "...");
         log.info("Scanning " + ((maxPort-minPort)+1) + " port(s) (" + minPort + "-" + maxPort + ")...");
+
+        ScannedHost result = new ScannedHost();
         Date startTime = new Date();
         try {
             InetAddress ia = InetAddress.getByName(getHost());
-            openPortsList = scan(ia);
+            result.setOpenedPorts(scan(ia));
         } catch (IOException ioe) {
             openPortsList  = null;
         }
         Date endTime = new Date();
-        executionTime = endTime.getTime() - startTime.getTime();
-        printOpenPorts();
-        log.info("Execution time: " + executionTime + " millis.");
+        result.setHost(host);
+        result.setExecutionTime(endTime.getTime() - startTime.getTime());
+
+        log.info("Execution time: " + result.getExecutionTime() + " millis.");
+
+        return result;
     }
 
-    ArrayList<Integer> scan(InetAddress inetAddress) {
+    private ArrayList<Integer> scan(InetAddress inetAddress) {
         ArrayList<Integer> openPortsList = new ArrayList<Integer>(0xFF);
         for (int port = minPort; port <= maxPort; port++) {
             try {

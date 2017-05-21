@@ -14,6 +14,9 @@ public class ScannedHost {
         this.executionTime = executionTime;
     }
 
+    public ScannedHost() {
+    }
+
     public String getHost() {
         return host;
     }
@@ -24,5 +27,17 @@ public class ScannedHost {
 
     public long getExecutionTime() {
         return executionTime;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public void setOpenedPorts(ArrayList<Integer> openedPorts) {
+        this.openedPorts = openedPorts;
+    }
+
+    public void setExecutionTime(long executionTime) {
+        this.executionTime = executionTime;
     }
 }
