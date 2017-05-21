@@ -11,6 +11,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
+import javax.swing.text.PlainDocument;
 import java.awt.event.ActionEvent;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -39,23 +40,17 @@ public class ScanFrame extends JFrame {
     private JLabel jLabel3;
     private JLabel jLabel2;
     private JLabel jLabel1;
-    private JFormattedTextField jFormattedTextField1;
-    private JFormattedTextField jFormattedTextField2;
-    private JFormattedTextField jFormattedTextField3;
-    private JFormattedTextField jFormattedTextField4;
+    private JTextField jTextField5;
+    private JTextField jTextField2;
+    private JTextField jTextField3;
+    private JTextField jTextField4;
     private ScannedHost resultExternal;
     private ScannedHost resultLocal;
 
     public ScanFrame() {
         super("Port Scanner");
         openPortsList = null;
-        MaskFormatter formatPort = null;
-        MaskFormatter formatTimeout = null;
-        try {
-            formatPort = new MaskFormatter ("#####");
-            formatTimeout = new MaskFormatter ("###");
-        } catch (ParseException e) {
-        }
+
         openPortsList = null;
         jButton1 = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
@@ -69,11 +64,18 @@ public class ScanFrame extends JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jFormattedTextField1 = new javax.swing.JFormattedTextField(formatPort);
-        jFormattedTextField2 = new javax.swing.JFormattedTextField(formatPort);
-        jFormattedTextField3 = new javax.swing.JFormattedTextField(formatTimeout);
-        jFormattedTextField4 = new javax.swing.JFormattedTextField(formatTimeout);
-
+        jTextField2 = new javax.swing.JTextField();
+        jTextField3 = new javax.swing.JTextField();
+        jTextField4 = new javax.swing.JTextField();
+        jTextField5 = new javax.swing.JTextField();
+        PlainDocument doc2 = (PlainDocument) jTextField2.getDocument();
+        doc2.setDocumentFilter(new Filter());
+        PlainDocument doc3 = (PlainDocument) jTextField3.getDocument();
+        doc3.setDocumentFilter(new Filter());
+        PlainDocument doc4 = (PlainDocument) jTextField4.getDocument();
+        doc4.setDocumentFilter(new Filter());
+        PlainDocument doc5 = (PlainDocument) jTextField5.getDocument();
+        doc5.setDocumentFilter(new Filter());
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jButton1.setText("Scan");
@@ -102,7 +104,6 @@ public class ScanFrame extends JFrame {
 
         jLabel7.setText("Glob. timeout:");
 
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -123,23 +124,22 @@ public class ScanFrame extends JFrame {
                                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                                         .addComponent(jTextField1)
                                                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                                                .addComponent(jFormattedTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                                                                                .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
+                                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                                                                 .addComponent(jLabel7)
                                                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                                                .addComponent(jFormattedTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                                                .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                                .addComponent(jTextField2)
+                                                                                .addGap(18, 18, 18)
                                                                                 .addComponent(jLabel3)
                                                                                 .addGap(18, 18, 18)
-                                                                                .addComponent(jFormattedTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addGap(146, 146, 146)
-                                                .addComponent(jLabel1)
-                                                .addGap(0, 0, Short.MAX_VALUE))
+                                                                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addGap(146, 146, 146)
+                                                                .addComponent(jLabel1))
                                                         .addGroup(layout.createSequentialGroup()
                                                                 .addGap(163, 163, 163)
                                                                 .addComponent(jLabel5))
@@ -158,8 +158,8 @@ public class ScanFrame extends JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabel2)
                                         .addComponent(jLabel3)
-                                        .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jFormattedTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -168,8 +168,8 @@ public class ScanFrame extends JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabel6)
                                         .addComponent(jLabel7)
-                                        .addComponent(jFormattedTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jFormattedTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(15, 15, 15)
                                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -207,10 +207,10 @@ public class ScanFrame extends JFrame {
         int timeoutLoc;
         int timeoutGlob;
         try {
-            portFrom = Integer.parseInt(jFormattedTextField1.getText());
-            portTo = Integer.parseInt(jFormattedTextField2.getText());
-            timeoutLoc = Integer.parseInt(jFormattedTextField3.getText());
-            timeoutGlob = Integer.parseInt(jFormattedTextField4.getText());
+            portFrom = Integer.parseInt(jTextField2.getText());
+            portTo = Integer.parseInt(jTextField3.getText());
+            timeoutLoc = Integer.parseInt(jTextField4.getText());
+            timeoutGlob = Integer.parseInt(jTextField5.getText());
         } catch (Exception ex) {
             portFrom = 1;
             portTo = 1000;
