@@ -27,7 +27,7 @@ public class Application {
     @Bean
     public ScanFrame scanFrame() {
         ScanFrame form = new ScanFrame();
-        form.setSize(285, 500);
+        form.setSize(410, 500);
         form.setVisible(true);
         return form;
     }

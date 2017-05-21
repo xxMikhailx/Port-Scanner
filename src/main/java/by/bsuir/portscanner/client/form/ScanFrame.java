@@ -10,7 +10,9 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.swing.*;
+import javax.swing.text.MaskFormatter;
 import java.awt.event.ActionEvent;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 
@@ -28,49 +30,65 @@ public class ScanFrame extends JFrame {
     private JButton jButton1;
     private JScrollPane jScrollPane1;
     private JTextArea jTextArea1;
-    private JTextField jTextField2;
-    private JTextField jTextField3;
     private JSeparator jSeparator1;
     private ArrayList<Integer> openPortsList;
+    private JLabel jLabel7;
+    private JLabel jLabel6;
     private JLabel jLabel5;
     private JLabel jLabel4;
     private JLabel jLabel3;
     private JLabel jLabel2;
     private JLabel jLabel1;
+    private JFormattedTextField jFormattedTextField1;
+    private JFormattedTextField jFormattedTextField2;
+    private JFormattedTextField jFormattedTextField3;
+    private JFormattedTextField jFormattedTextField4;
     private ScannedHost resultExternal;
     private ScannedHost resultLocal;
 
     public ScanFrame() {
         super("Port Scanner");
         openPortsList = null;
+        MaskFormatter formatPort = null;
+        MaskFormatter formatTimeout = null;
+        try {
+            formatPort = new MaskFormatter ("#####");
+            formatTimeout = new MaskFormatter ("###");
+        } catch (ParseException e) {
+        }
+        openPortsList = null;
         jButton1 = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jFormattedTextField1 = new javax.swing.JFormattedTextField(formatPort);
+        jFormattedTextField2 = new javax.swing.JFormattedTextField(formatPort);
+        jFormattedTextField3 = new javax.swing.JFormattedTextField(formatTimeout);
+        jFormattedTextField4 = new javax.swing.JFormattedTextField(formatTimeout);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("Test");
-        jButton1.addActionListener(this::jButton1ActionPerformed);
+        jButton1.setText("Scan");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jTextArea1.setToolTipText("");
         jScrollPane1.setViewportView(jTextArea1);
 
-        jTextField2.setToolTipText("");
-
-        jTextField3.setToolTipText("");
-
-        jLabel1.setText("Port's Range");
+        jLabel1.setText("Port's range");
 
         jLabel2.setText("Min port:");
 
@@ -80,6 +98,11 @@ public class ScanFrame extends JFrame {
 
         jLabel5.setText("Result");
 
+        jLabel6.setText("Loc. tmeout:");
+
+        jLabel7.setText("Glob. timeout:");
+
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -88,56 +111,71 @@ public class ScanFrame extends JFrame {
                         .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
-                                                .addGap(88, 88, 88)
-                                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(layout.createSequentialGroup()
                                                 .addContainerGap()
-                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(jLabel6)
+                                                                        .addComponent(jLabel4)
+                                                                        .addComponent(jLabel2))
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(jTextField1)
+                                                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                                                .addComponent(jFormattedTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                                                                                .addComponent(jLabel7)
+                                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                                                .addComponent(jFormattedTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                                                .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                                .addComponent(jLabel3)
+                                                                                .addGap(18, 18, 18)
+                                                                                .addComponent(jFormattedTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                                         .addGroup(layout.createSequentialGroup()
-                                                .addGap(88, 88, 88)
-                                                .addComponent(jLabel1))
+                                                .addGap(146, 146, 146)
+                                                .addComponent(jLabel1)
+                                                .addGap(0, 0, Short.MAX_VALUE))
                                         .addGroup(layout.createSequentialGroup()
-                                                .addGap(113, 113, 113)
-                                                .addComponent(jLabel5))
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                                        .addContainerGap()
-                                                        .addComponent(jTextField1))
-                                                .addGroup(layout.createSequentialGroup()
-                                                        .addGap(11, 11, 11)
-                                                        .addComponent(jLabel2)
-                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                .addComponent(jLabel4)
-                                                                .addGroup(layout.createSequentialGroup()
-                                                                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                                        .addComponent(jLabel3)
-                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addGap(163, 163, 163)
+                                                                .addComponent(jLabel5))
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addGap(134, 134, 134)
+                                                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                .addGap(0, 0, Short.MAX_VALUE)))
+                                .addContainerGap())
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGap(16, 16, 16)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jLabel2)
-                                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel3))
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel4)
-                                .addGap(18, 18, 18)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jLabel3)
+                                        .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jFormattedTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel6)
+                                        .addComponent(jLabel7)
+                                        .addComponent(jFormattedTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jFormattedTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(15, 15, 15)
                                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(1, 1, 1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel5)
-                                .addGap(10, 10, 10)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
                                 .addGap(18, 18, 18)
                                 .addComponent(jButton1)
                                 .addContainerGap())
@@ -164,41 +202,44 @@ public class ScanFrame extends JFrame {
     }
 
     private void jButton1ActionPerformed(ActionEvent evt) {
-        int port1;
-        int port2;
-        int i;
+        int portFrom;
+        int portTo;
+        int timeoutLoc;
+        int timeoutGlob;
+        try {
+            portFrom = Integer.parseInt(jFormattedTextField1.getText());
+            portTo = Integer.parseInt(jFormattedTextField2.getText());
+            timeoutLoc = Integer.parseInt(jFormattedTextField3.getText());
+            timeoutGlob = Integer.parseInt(jFormattedTextField4.getText());
+        } catch (Exception ex) {
+            portFrom = 1;
+            portTo = 1000;
+            timeoutLoc = 50;
+            timeoutGlob = 50;
+        }
+
+        int i = portFrom;
         long time=0;
-        try {
-            port1 = Integer.parseInt(jTextField2.getText());
-        } catch (Exception ex) {
-            port1 = 1;
-        }
-        try {
-            port2 = Integer.parseInt(jTextField3.getText());
-        } catch (Exception ex) {
-            port2 = 1000;
-        }
-        i = port1;
-        jTextArea1.setText(jTextArea1.getText() + "\nScanning ports("+port1+"-"+port2+")...\nHost:  " + jTextField1.getText() + "\nList of opened ports:\n");
+        jTextArea1.setText(jTextArea1.getText() + "\nScanning ports("+portFrom+"-"+portTo+")...\nHost:  " + jTextField1.getText() + "\nList of opened ports:\n");
         jTextArea1.update(jTextArea1.getGraphics());
-        while(i < port2){
-            if(i+100 < port2){
-                resultLocal = new PortScanner( i ,i+100,jTextField1.getText(), 50).scan();
+        while(i < portTo){
+            if(i+100 < portTo){
+                resultLocal = new PortScanner( i ,i+100,jTextField1.getText(), timeoutLoc).scan();
                 log.info("Local result: " + resultLocal.toString());
-                resultExternal = restTemplate.getForObject(buildURI(i, i+100, jTextField1.getText(), 100), ScannedHost.class);
+                resultExternal = restTemplate.getForObject(buildURI(i, i+100, jTextField1.getText(), timeoutGlob), ScannedHost.class);
                 log.info("External result: " + resultExternal.toString());
                 jTextArea1.setText(jTextArea1.getText() + PortListToStr(resultLocal.getOpenedPorts(), resultExternal.getOpenedPorts()));
                 time += resultLocal.getExecutionTime() + resultExternal.getExecutionTime();
                 i +=100;
                 jTextArea1.update(jTextArea1.getGraphics());
             }else{
-                resultLocal = new PortScanner(i, port2, jTextField1.getText(), 50).scan();
+                resultLocal = new PortScanner(i, portTo, jTextField1.getText(), timeoutLoc).scan();
                 log.info("Local result: " + resultLocal.toString());
-                resultExternal = restTemplate.getForObject(buildURI(i, port2, jTextField1.getText(), 100), ScannedHost.class);
+                resultExternal = restTemplate.getForObject(buildURI(i, portTo, jTextField1.getText(), timeoutGlob), ScannedHost.class);
                 log.info("External result: " + resultExternal.toString());
                 jTextArea1.setText(jTextArea1.getText() + PortListToStr(resultLocal.getOpenedPorts(), resultExternal.getOpenedPorts()));
                 time += resultLocal.getExecutionTime() + resultExternal.getExecutionTime();
-                i = port2;
+                i = portTo;
                 jTextArea1.update(jTextArea1.getGraphics());
             }
         }
