@@ -149,7 +149,6 @@ public class ScanFrame extends JFrame {
         String Text = "";
         if (openPortsListLocal != null) {
             if (openPortsListLocal.size() > 0) {
-                Text += "List of opened ports:\n";
                 for (Integer openedPort : openPortsListLocal) {
                     if (openPortsListExternal.contains(openedPort)) {
                         Text += openedPort + "+" + "\n";
@@ -157,8 +156,6 @@ public class ScanFrame extends JFrame {
                         Text += openedPort + "\n";
                     }
                 }
-            } else {
-                Text += "\nNo opened ports!\n";
             }
         } else {
             Text += "\nError happened!\n";
@@ -169,8 +166,8 @@ public class ScanFrame extends JFrame {
     private void jButton1ActionPerformed(ActionEvent evt) {
         int port1;
         int port2;
-        jTextArea1.setText(jTextArea1.getText() + "\nScanning ports...\n");
-        jTextArea1.update(jTextArea1.getGraphics());
+        int i;
+        long time=0;
         try {
             port1 = Integer.parseInt(jTextField2.getText());
         } catch (Exception ex) {
@@ -181,13 +178,32 @@ public class ScanFrame extends JFrame {
         } catch (Exception ex) {
             port2 = 1000;
         }
-
-        resultLocal = new PortScanner(port1, port2, jTextField1.getText(), 5).scan();
-        log.info("Local result: " + resultLocal.toString());
-        resultExternal = restTemplate.getForObject(buildURI(port1, port2, jTextField1.getText(), 100), ScannedHost.class);
-        log.info("External result: " + resultExternal.toString());
-        jTextArea1.setText(jTextArea1.getText() + "Host:  " + resultExternal.getHost() + "\n" + PortListToStr(resultLocal.getOpenedPorts(), resultExternal.getOpenedPorts()) + "Execution time:  " + resultExternal.getExecutionTime() + " ms\n");
-    }
+        i = port1;
+        jTextArea1.setText(jTextArea1.getText() + "\nScanning ports("+port1+"-"+port2+")...\nHost:  " + jTextField1.getText() + "\nList of opened ports:\n");
+        jTextArea1.update(jTextArea1.getGraphics());
+        while(i < port2){
+            if(i+100 < port2){
+                resultLocal = new PortScanner( i ,i+100,jTextField1.getText(), 50).scan();
+                log.info("Local result: " + resultLocal.toString());
+                resultExternal = restTemplate.getForObject(buildURI(i, i+100, jTextField1.getText(), 100), ScannedHost.class);
+                log.info("External result: " + resultExternal.toString());
+                jTextArea1.setText(jTextArea1.getText() + PortListToStr(resultLocal.getOpenedPorts(), resultExternal.getOpenedPorts()));
+                time += resultLocal.getExecutionTime() + resultExternal.getExecutionTime();
+                i +=100;
+                jTextArea1.update(jTextArea1.getGraphics());
+            }else{
+                resultLocal = new PortScanner(i, port2, jTextField1.getText(), 50).scan();
+                log.info("Local result: " + resultLocal.toString());
+                resultExternal = restTemplate.getForObject(buildURI(i, port2, jTextField1.getText(), 100), ScannedHost.class);
+                log.info("External result: " + resultExternal.toString());
+                jTextArea1.setText(jTextArea1.getText() + PortListToStr(resultLocal.getOpenedPorts(), resultExternal.getOpenedPorts()));
+                time += resultLocal.getExecutionTime() + resultExternal.getExecutionTime();
+                i = port2;
+                jTextArea1.update(jTextArea1.getGraphics());
+            }
+        }
+        jTextArea1.setText(jTextArea1.getText() +"Execution time:  " + time + " ms\n");
+        }
 
     private String buildURI(int minPort, int maxPort, String host, long timeout) {
         return UriComponentsBuilder.newInstance()

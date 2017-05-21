@@ -24,15 +24,8 @@ public class PortScanner {
     private long executionTime;
 
     public PortScanner(int minPort, int maxPort, String host, int timeout) {
-        if (!(minPort == -1 && maxPort == -1)) {
-            if (!(maxPort == -1)) {
-                this.minPort = minPort;
-                this.maxPort = maxPort;
-            } else {
-                this.minPort = minPort;
-                this.maxPort = minPort;
-            }
-        }
+        this.minPort = minPort;
+        this.maxPort = maxPort;
         this.host = host;
         this.timeout = timeout;
     }
