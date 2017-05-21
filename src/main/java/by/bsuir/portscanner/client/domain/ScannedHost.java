@@ -1,4 +1,4 @@
-package by.bsuir.portscanner.client;
+package by.bsuir.portscanner.client.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.ArrayList;
